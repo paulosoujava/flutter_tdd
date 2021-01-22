@@ -92,8 +92,8 @@ void main() {
       expect(response, null);
     });
 
-    test("Should return  null if post returns 204", () async {
-      mockResponse(204, body: '');
+    test("Should return  null if post returns 400", () async {
+      mockResponse(400, body: '');
       final response = await sut.request(
         url: url,
         method: 'post',
@@ -102,8 +102,8 @@ void main() {
       expect(response, null);
     });
 
-    test("Should return  null if post returns 204 with data", () async {
-      mockResponse(204);
+    test("Should return  null if post returns 403 with data", () async {
+      mockResponse(403);
       final response = await sut.request(
         url: url,
         method: 'post',
