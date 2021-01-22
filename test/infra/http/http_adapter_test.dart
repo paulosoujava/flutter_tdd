@@ -14,7 +14,8 @@ class HttpAdapter {
 
   Future<void> request({@required String url, @required String method, Map body}) async {
     final headers = {'content-tye': 'application/json', 'accept': 'application/json'};
-    await client.post(url, headers: headers, body: jsonEncode(body));
+    final jsonBody = body != null ? jsonEncode(body) : null;
+    await client.post(url, headers: headers, body: jsonBody);
   }
 }
 
@@ -35,7 +36,24 @@ void main() {
     test("Should call post with correct values", () async {
       await sut.request(url: url, method: 'post', body: {'any_key': 'any_value'});
 
-      verify(client.post(url, headers: {'content-tye': 'application/json', 'accept': 'application/json'}, body: '{"any_key":"any_value"}'));
+      verify(
+        client.post(
+          url,
+          headers: {'content-tye': 'application/json', 'accept': 'application/json'},
+          body: '{"any_key":"any_value"}',
+        ),
+      );
+    });
+    test("Should call post without body", () async {
+      await sut.request(
+        url: url,
+        method: 'post',
+      );
+
+      verify(client.post(
+        any,
+        headers: anyNamed('headers'),
+      ));
     });
   });
 }
