@@ -14,7 +14,10 @@ class HttpAdapter implements HttpClient {
     final headers = {'content-tye': 'application/json', 'accept': 'application/json'};
     final jsonBody = body != null ? jsonEncode(body) : null;
     final response = await client.post(url, headers: headers, body: jsonBody);
+    return _handleReponse(response);
+  }
 
+  Map _handleReponse(Response response) {
     if (response.statusCode == 200) {
       return response.body.isEmpty ? null : jsonDecode(response.body);
     } else {
