@@ -70,6 +70,15 @@ void main() {
 
       expect(response, null);
     });
+    test("Should return ServerError if post returns 401", () async {
+      mockResponse(401);
+      final future = sut.request(
+        url: url,
+        method: 'post',
+      );
+
+      expect(future, throwsA(HttpError.unauthorized));
+    });
     test("Should return  null if post returns 403", () async {
       mockResponse(403, body: '');
       final response = await sut.request(
