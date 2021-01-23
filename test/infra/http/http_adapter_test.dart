@@ -52,7 +52,6 @@ void main() {
         headers: anyNamed('headers'),
       ));
     });
-
     test("Should return data if post return 200", () async {
       final response = await sut.request(
         url: url,
@@ -61,7 +60,6 @@ void main() {
 
       expect(response, {'any_key': 'any_value'});
     });
-
     test("Should return  null if post returns 200 with no data", () async {
       mockResponse(200, body: '');
       final response = await sut.request(
@@ -71,7 +69,6 @@ void main() {
 
       expect(response, null);
     });
-
     test("Should return  null if post returns 400", () async {
       mockResponse(400, body: '');
       final response = await sut.request(
@@ -81,7 +78,6 @@ void main() {
 
       expect(response, null);
     });
-
     test("Should return  null if post returns 403 with data", () async {
       mockResponse(403);
       final response = await sut.request(
