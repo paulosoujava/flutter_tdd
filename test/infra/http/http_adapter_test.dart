@@ -42,6 +42,7 @@ void main() {
         ),
       );
     });
+
     test("Should call post without body", () async {
       await sut.request(
         url: url,
@@ -53,6 +54,7 @@ void main() {
         headers: anyNamed('headers'),
       ));
     });
+
     test("Should return data if post return 200", () async {
       final response = await sut.request(
         url: url,
@@ -61,6 +63,7 @@ void main() {
 
       expect(response, {'any_key': 'any_value'});
     });
+
     test("Should return  null if post returns 200 with no data", () async {
       mockResponse(200, body: '');
       final response = await sut.request(
@@ -70,17 +73,9 @@ void main() {
 
       expect(response, null);
     });
-    test("Should return ServerError if post returns 401", () async {
-      mockResponse(401);
-      final future = sut.request(
-        url: url,
-        method: 'post',
-      );
 
-      expect(future, throwsA(HttpError.unauthorized));
-    });
-    test("Should return  null if post returns 403", () async {
-      mockResponse(403, body: '');
+    test("Should return  null if post returns 204", () async {
+      mockResponse(204, body: '');
       final response = await sut.request(
         url: url,
         method: 'post',
@@ -88,8 +83,9 @@ void main() {
 
       expect(response, null);
     });
-    test("Should return  null if post returns 403 with data", () async {
-      mockResponse(403);
+
+    test("Should return  null if post returns 204 with data", () async {
+      mockResponse(204);
       final response = await sut.request(
         url: url,
         method: 'post',
@@ -97,6 +93,7 @@ void main() {
 
       expect(response, null);
     });
+
     test("Should return BadRequestError if post returns 400", () async {
       mockResponse(400);
       final future = sut.request(
@@ -106,6 +103,7 @@ void main() {
 
       expect(future, throwsA(HttpError.badRequest));
     });
+
     test("Should return BadRequestError if post returns 400 without data", () async {
       mockResponse(400, body: '');
       final future = sut.request(
@@ -115,6 +113,27 @@ void main() {
 
       expect(future, throwsA(HttpError.badRequest));
     });
+
+    test("Should return ServerError if post returns 401", () async {
+      mockResponse(401);
+      final future = sut.request(
+        url: url,
+        method: 'post',
+      );
+
+      expect(future, throwsA(HttpError.unauthorized));
+    });
+
+    test("Should return ServerError if post returns 403", () async {
+      mockResponse(403);
+      final future = sut.request(
+        url: url,
+        method: 'post',
+      );
+
+      expect(future, throwsA(HttpError.forbidden));
+    });
+
     test("Should return ServerError if post returns 500", () async {
       mockResponse(500);
       final future = sut.request(
