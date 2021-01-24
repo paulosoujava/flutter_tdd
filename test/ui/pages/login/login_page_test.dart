@@ -13,6 +13,7 @@ void main() {
   LoginPresenter presenter;
   StreamController<String> emailErrorConttroller;
   StreamController<String> passwordErrorConttroller;
+  StreamController<String> mainErrorController;
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadController;
 
@@ -20,11 +21,13 @@ void main() {
     presenter = LoginPresenterSpy();
     emailErrorConttroller = StreamController<String>();
     passwordErrorConttroller = StreamController<String>();
+    mainErrorController = StreamController<String>();
     isFormValidController = StreamController<bool>();
     isLoadController = StreamController<bool>();
 
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorConttroller.stream);
     when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorConttroller.stream);
+    when(presenter.mainErrorController).thenAnswer((_) => mainErrorController.stream);
     when(presenter.isFormValidController).thenAnswer((_) => isFormValidController.stream);
     when(presenter.isLoadController).thenAnswer((_) => isLoadController.stream);
 
@@ -35,6 +38,7 @@ void main() {
   tearDown(() {
     emailErrorConttroller.close();
     passwordErrorConttroller.close();
+    mainErrorController.close();
     isFormValidController.close();
     isLoadController.close();
   });
@@ -189,6 +193,7 @@ void main() {
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
+
   testWidgets('Should presenter  hide loading', (WidgetTester tester) async {
     await loadPage(tester);
 
@@ -197,5 +202,14 @@ void main() {
     isLoadController.add(false);
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets('Should presenter error message if authentication fails', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    mainErrorController.add('main error');
+    await tester.pump();
+
+    expect(find.text('main error'), findsOneWidget);
   });
 }
