@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ui/pages/login/components/size_screem.dart';
 
 import 'components/components.dart';
+import '../login/components/components.dart';
+import '../../pages/pages.dart';
 
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
+class LoginPage extends StatelessWidget {
+  final LoginPresenter presenter;
 
-class _LoginPageState extends State<LoginPage> {
+  const LoginPage(this.presenter);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Column(
                     children: [
-                      entryField(),
+                      entryField(presenter),
                       SizedBox(height: 20.0),
                       submitButton(context),
                       forgetPassword(),

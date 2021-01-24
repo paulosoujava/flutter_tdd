@@ -20,7 +20,7 @@ class _AppState extends State<App> {
         primaryColorDark: Color(0xfff7884c),
         backgroundColor: Colors.white,
       ),
-      home: LoginPage(),
+      home: LoginPage(null),
     );
   }
 }

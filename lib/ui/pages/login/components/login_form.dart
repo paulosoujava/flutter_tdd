@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-Widget entryField() {
+import '../login_presenter.dart';
+
+Widget entryField(LoginPresenter presenter) {
   return Container(
     margin: EdgeInsets.symmetric(vertical: 10),
     child: Form(
@@ -11,6 +13,8 @@ Widget entryField() {
             height: 30,
           ),
           TextFormField(
+            keyboardType: TextInputType.emailAddress,
+            onChanged: presenter.validateEmail,
             decoration: InputDecoration(
                 labelText: "Email",
                 border: OutlineInputBorder(
@@ -22,7 +26,6 @@ Widget entryField() {
                 focusColor: Colors.orange,
                 hintStyle: TextStyle(color: Colors.grey[300]),
                 fillColor: Colors.white70),
-            keyboardType: TextInputType.emailAddress,
           ),
           SizedBox(
             height: 15,
@@ -30,6 +33,7 @@ Widget entryField() {
           TextFormField(
             obscureText: true,
             keyboardType: TextInputType.text,
+            onChanged: presenter.validatePassword,
             decoration: InputDecoration(
                 labelText: "Senha",
                 border: OutlineInputBorder(
