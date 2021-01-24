@@ -17,6 +17,10 @@ class LoginPage extends StatelessWidget {
           presenter.isLoadController.listen((isLoading) {
             if (isLoading) {
               loading(context);
+            } else {
+              if (Navigator.canPop(context)) {
+                Navigator.of(context).pop();
+              }
             }
           });
           return Container(
