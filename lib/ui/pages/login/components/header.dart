@@ -15,7 +15,7 @@ Widget header() {
       ),
       Text(
         "LOGIN",
-        style: GoogleFonts.actor(
+        style: GoogleFonts.montserrat(
           textStyle: TextStyle(
             color: Colors.orangeAccent,
             letterSpacing: 9,

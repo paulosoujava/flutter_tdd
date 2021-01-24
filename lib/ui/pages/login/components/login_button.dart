@@ -8,7 +8,7 @@ StreamBuilder submitButton(context, LoginPresenter presenter) {
       stream: presenter.isFormValidController,
       builder: (context, snapshot) {
         return RaisedButton(
-          onPressed: snapshot.data == true ? () {} : null,
+          onPressed: snapshot.data == true ? presenter.auth : null,
           color: Color(0xfffbb448),
           child: Container(
             width: sizeScreenWidth(context),
