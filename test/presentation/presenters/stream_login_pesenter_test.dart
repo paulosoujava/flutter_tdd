@@ -1,5 +1,5 @@
 import 'package:faker/faker.dart';
-import 'package:flutter_application_1/domain/helpers/helpers.dart';
+
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -7,6 +7,7 @@ import 'package:flutter_application_1/domain/entities/account_entity.dart';
 import 'package:flutter_application_1/domain/usecases/usecases.dart';
 import 'package:flutter_application_1/presentention/presenters/presenters.dart';
 import 'package:flutter_application_1/presentention/protocols/protocols.dart';
+import 'package:flutter_application_1/domain/helpers/helpers.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 
