@@ -70,4 +70,32 @@ void main() {
 
     expect(find.text('any error'), findsOneWidget);
   });
+
+  testWidgets('Should presenter no error if email is valid, returns error null', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorConttroller.add(null);
+    await tester.pump();
+
+    expect(
+        find.descendant(
+          of: find.bySemanticsLabel(('Email')),
+          matching: find.byType(Text),
+        ),
+        findsOneWidget);
+  });
+
+  testWidgets('Should presenter no error if email is valid, returns empty', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorConttroller.add('');
+    await tester.pump();
+
+    expect(
+        find.descendant(
+          of: find.bySemanticsLabel(('Email')),
+          matching: find.byType(Text),
+        ),
+        findsOneWidget);
+  });
 }

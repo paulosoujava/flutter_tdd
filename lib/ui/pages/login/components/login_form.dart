@@ -19,7 +19,7 @@ Widget entryField(LoginPresenter presenter) {
                   keyboardType: TextInputType.emailAddress,
                   onChanged: presenter.validateEmail,
                   decoration: InputDecoration(
-                      errorText: snapshot.data,
+                      errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
                       labelText: "Email",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
