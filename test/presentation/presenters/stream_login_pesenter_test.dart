@@ -35,7 +35,9 @@ void main() {
     mockValidation(value: 'string error');
 
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'string error')));
-// nao notificar duas vezes, isso se da por conta do distinct no stream_login+presenter
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    // nao notificar duas vezes, isso se da por conta do distinct no stream_login+presenter
     sut.validateEmail(email);
     sut.validateEmail(email);
   });
