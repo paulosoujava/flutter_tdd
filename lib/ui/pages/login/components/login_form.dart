@@ -12,21 +12,26 @@ Widget entryField(LoginPresenter presenter) {
           SizedBox(
             height: 30,
           ),
-          TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            onChanged: presenter.validateEmail,
-            decoration: InputDecoration(
-                labelText: "Email",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  ),
-                ),
-                filled: true,
-                focusColor: Colors.orange,
-                hintStyle: TextStyle(color: Colors.grey[300]),
-                fillColor: Colors.white70),
-          ),
+          StreamBuilder<String>(
+              stream: presenter.emailErrorStream,
+              builder: (context, snapshot) {
+                return TextFormField(
+                  keyboardType: TextInputType.emailAddress,
+                  onChanged: presenter.validateEmail,
+                  decoration: InputDecoration(
+                      errorText: snapshot.data,
+                      labelText: "Email",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                      ),
+                      filled: true,
+                      focusColor: Colors.orange,
+                      hintStyle: TextStyle(color: Colors.grey[300]),
+                      fillColor: Colors.white70),
+                );
+              }),
           SizedBox(
             height: 15,
           ),
