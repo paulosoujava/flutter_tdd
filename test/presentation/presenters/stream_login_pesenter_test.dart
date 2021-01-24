@@ -86,7 +86,18 @@ void main() {
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateEmail(password);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+  });
+
+  test('Should emit error only password input and email is ok', () {
+    mockValidation(field: 'password', value: 'error');
+
+    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
+
+    sut.validateEmail(email);
     sut.validatePassword(password);
   });
 }
