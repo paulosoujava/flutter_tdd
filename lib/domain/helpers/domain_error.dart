@@ -5,6 +5,8 @@ extension DomainErrorExtension on DomainError {
     switch (this) {
       case DomainError.invalidCredentials:
         return 'invalid credentials';
+      case DomainError.unexpected:
+        return 'unexpectedError';
       default:
         return '';
     }
