@@ -29,7 +29,7 @@ class LoginPage extends StatelessWidget {
                     children: [
                       entryField(presenter),
                       SizedBox(height: 20.0),
-                      submitButton(context),
+                      submitButton(context, presenter),
                       forgetPassword(),
                       divider(),
                       facebookButton(),
