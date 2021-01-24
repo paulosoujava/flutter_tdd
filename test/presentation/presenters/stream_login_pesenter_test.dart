@@ -11,6 +11,7 @@ void main() {
   ValidationSpy validation;
   StreamLoginPresenter sut;
   String email;
+  String password;
 
   PostExpectation mockValidationCall(String field) => when(validation.validate(field: field ?? anyNamed('field'), value: anyNamed('value')));
 
@@ -22,6 +23,7 @@ void main() {
     validation = ValidationSpy();
     sut = StreamLoginPresenter(validation: validation);
     email = faker.internet.email();
+    password = faker.internet.password();
     mockValidation(); //mock to success
   });
 
@@ -49,5 +51,11 @@ void main() {
     // nao notificar duas vezes, isso se da por conta do distinct no stream_login_presenter
     sut.validateEmail(email);
     sut.validateEmail(email);
+  });
+
+  test('Should call validation with correct password', () {
+    sut.validatePassword(password);
+
+    verify(validation.validate(field: 'password', value: password)).called(1);
   });
 }
