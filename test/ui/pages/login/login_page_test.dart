@@ -61,7 +61,7 @@ void main() {
     expect(
       emailTextChildren,
       findsOneWidget,
-      reason: "When a TextFomrField has only one text child, means ot has no erros one of the childs is always the  label text",
+      reason: "When a TextFomrField has only one text child, means it has no erros one of the childs is always the  label text",
     );
     final passwordTextChildren = find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text));
     expect(

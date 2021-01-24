@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'components/components.dart';
 import '../login/components/components.dart';
@@ -52,17 +53,20 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 30.0),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 25),
-                      child: Column(
-                        children: [
-                          entryField(widget.presenter),
-                          SizedBox(height: 20.0),
-                          submitButton(context, widget.presenter),
-                          forgetPassword(),
-                          divider(),
-                          facebookButton(),
-                          SizedBox(height: sizeScreenHeight(context) * .055),
-                          backTalkWithUs(),
-                        ],
+                      child: Provider(
+                        create: (_) => widget.presenter,
+                        child: Column(
+                          children: [
+                            EntryFields(),
+                            SizedBox(height: 20.0),
+                            SubmitButton(),
+                            forgetPassword(),
+                            divider(),
+                            facebookButton(),
+                            SizedBox(height: sizeScreenHeight(context) * .055),
+                            backTalkWithUs(),
+                          ],
+                        ),
                       ),
                     )
                   ],
