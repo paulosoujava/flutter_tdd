@@ -12,17 +12,21 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {}
 void main() {
   LoginPresenter presenter;
   StreamController<String> emailErrorConttroller;
+  StreamController<String> passwordErrorConttroller;
 
   Future<void> loadPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
     emailErrorConttroller = StreamController<String>();
+    passwordErrorConttroller = StreamController<String>();
     when(presenter.emailErrorStream).thenAnswer((_) => emailErrorConttroller.stream);
+    when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorConttroller.stream);
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
 
   tearDown(() {
     emailErrorConttroller.close();
+    passwordErrorConttroller.close();
   });
 
   testWidgets('Should load with correct initial state', (WidgetTester tester) async {
@@ -94,6 +98,43 @@ void main() {
     expect(
         find.descendant(
           of: find.bySemanticsLabel(('Email')),
+          matching: find.byType(Text),
+        ),
+        findsOneWidget);
+  });
+
+  testWidgets('Should presenter error if passeword is invalid', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorConttroller.add('any error');
+    await tester.pump();
+
+    expect(find.text('any error'), findsOneWidget);
+  });
+
+  testWidgets('Should presenter no error if passeword is valid, returns error null', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorConttroller.add(null);
+    await tester.pump();
+
+    expect(
+        find.descendant(
+          of: find.bySemanticsLabel(('Senha')),
+          matching: find.byType(Text),
+        ),
+        findsOneWidget);
+  });
+
+  testWidgets('Should presenter no error if passeword is valid, returns empty', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorConttroller.add('');
+    await tester.pump();
+
+    expect(
+        find.descendant(
+          of: find.bySemanticsLabel(('Senha')),
           matching: find.byType(Text),
         ),
         findsOneWidget);

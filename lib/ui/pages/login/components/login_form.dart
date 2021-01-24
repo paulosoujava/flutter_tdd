@@ -19,8 +19,8 @@ Widget entryField(LoginPresenter presenter) {
                   keyboardType: TextInputType.emailAddress,
                   onChanged: presenter.validateEmail,
                   decoration: InputDecoration(
-                      errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
                       labelText: "Email",
+                      errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(10.0),
@@ -35,22 +35,27 @@ Widget entryField(LoginPresenter presenter) {
           SizedBox(
             height: 15,
           ),
-          TextFormField(
-            obscureText: true,
-            keyboardType: TextInputType.text,
-            onChanged: presenter.validatePassword,
-            decoration: InputDecoration(
-                labelText: "Senha",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  ),
-                ),
-                filled: true,
-                focusColor: Colors.orange,
-                hintStyle: TextStyle(color: Colors.grey[300]),
-                fillColor: Colors.white70),
-          ),
+          StreamBuilder<String>(
+              stream: presenter.passwordErrorStream,
+              builder: (context, snapshot) {
+                return TextFormField(
+                  obscureText: true,
+                  keyboardType: TextInputType.text,
+                  onChanged: presenter.validatePassword,
+                  decoration: InputDecoration(
+                      labelText: "Senha",
+                      errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                      ),
+                      filled: true,
+                      focusColor: Colors.orange,
+                      hintStyle: TextStyle(color: Colors.grey[300]),
+                      fillColor: Colors.white70),
+                );
+              }),
         ],
       ),
     ),
