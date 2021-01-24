@@ -4,17 +4,28 @@ import 'components/components.dart';
 import '../login/components/components.dart';
 import '../../pages/pages.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   final LoginPresenter presenter;
 
   const LoginPage(this.presenter);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
+  void dispose() {
+    super.dispose();
+    widget.presenter.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          presenter.isLoadController.listen((isLoading) {
+          widget.presenter.isLoadController.listen((isLoading) {
             if (isLoading) {
               loading(context);
             } else {
@@ -23,7 +34,7 @@ class LoginPage extends StatelessWidget {
               }
             }
           });
-          presenter.mainErrorController.listen((error) {
+          widget.presenter.mainErrorController.listen((error) {
             if (error != null) {
               Scaffold.of(context).showSnackBar(SnackBar(
                 backgroundColor: Colors.red[900],
@@ -49,9 +60,9 @@ class LoginPage extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 25),
                       child: Column(
                         children: [
-                          entryField(presenter),
+                          entryField(widget.presenter),
                           SizedBox(height: 20.0),
-                          submitButton(context, presenter),
+                          submitButton(context, widget.presenter),
                           forgetPassword(),
                           divider(),
                           facebookButton(),
