@@ -1,9 +1,9 @@
 import 'package:faker/faker.dart';
+import 'package:flutter_application_1/domain/entities/token_entity.dart';
 
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_application_1/domain/entities/account_entity.dart';
 import 'package:flutter_application_1/domain/usecases/usecases.dart';
 import 'package:flutter_application_1/presentention/presenters/presenters.dart';
 import 'package:flutter_application_1/presentention/protocols/protocols.dart';
@@ -13,12 +13,16 @@ class ValidationSpy extends Mock implements Validation {}
 
 class AuthenticationSpy extends Mock implements Authentication {}
 
+class SaveCurrentTokenSpy extends Mock implements SaveCurrentToken {}
+
 void main() {
   ValidationSpy validation;
   AuthenticationSpy authentication;
   StreamLoginPresenter sut;
+  SaveCurrentTokenSpy saveCurrentToken;
   String username;
   String password;
+  String token;
 
   PostExpectation mockValidationCall(String field) => when(validation.validate(field: field ?? anyNamed('field'), value: anyNamed('value')));
 
@@ -29,7 +33,7 @@ void main() {
   PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
 
   void mockAuthentication() {
-    mockAuthenticationCall().thenAnswer((_) async => AccountEntity(faker.guid.guid()));
+    mockAuthenticationCall().thenAnswer((_) async => Token(token));
   }
 
   void mockAuthenticationError(DomainError error) {
@@ -39,9 +43,15 @@ void main() {
   setUp(() {
     validation = ValidationSpy();
     authentication = AuthenticationSpy();
-    sut = StreamLoginPresenter(validation: validation, authentication: authentication);
+    saveCurrentToken = SaveCurrentTokenSpy();
+    sut = StreamLoginPresenter(
+      validation: validation,
+      authentication: authentication,
+      saveCurrentToken: saveCurrentToken,
+    );
     username = faker.internet.userName();
     password = faker.internet.password();
+    token = faker.guid.guid();
     mockValidation(); //mock to success
     mockAuthentication();
   });
@@ -169,6 +179,13 @@ void main() {
     sut.mainErrorStream.listen(expectAsync1((error) => expect(error, 'unexpectedError')));
 
     await sut.auth();
+  });
+
+  test('Should call SaveCurrentToken whith correct value', () async {
+    sut.validateUserName(username);
+    sut.validatePassword(password);
+    await sut.auth();
+    verify(saveCurrentToken.saveToken(Token(token))).called(1);
   });
 
   test('Should not emit after dispose', () async {

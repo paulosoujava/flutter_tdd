@@ -2,7 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_application_1/domain/entities/token.dart';
+import 'package:flutter_application_1/domain/entities/token_entity.dart';
 import 'package:flutter_application_1/data/cache/save_secure_cache_storage.dart';
 import 'package:flutter_application_1/data/usecases/save_current_token/local_save_current_token.dart';
 import 'package:flutter_application_1/domain/helpers/helpers.dart';
