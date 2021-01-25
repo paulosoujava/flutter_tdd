@@ -27,13 +27,13 @@ class RemoteAuthentication implements Authentication {
 
 //! aqui se tem o conhecimento sobre a api por isso o toJson esta aqui e nao no AuthenticationParams
 class RemoteAuthenticationParams {
-  final String email;
+  final String username;
   final String password;
 
-  RemoteAuthenticationParams({@required this.email, @required this.password});
+  RemoteAuthenticationParams({@required this.username, @required this.password});
 
 //! responsavel por gerar uma instancia de si mesmo apartir da classe de um dominio que é correspondente a ele
-  factory RemoteAuthenticationParams.fromDomain(AuthenticationParams params) => RemoteAuthenticationParams(email: params.email, password: params.password);
+  factory RemoteAuthenticationParams.fromDomain(AuthenticationParams params) => RemoteAuthenticationParams(username: params.username, password: params.password);
 
-  Map toJson() => {'email': email, 'password': password};
+  Map toJson() => {'username': username, 'password': password};
 }

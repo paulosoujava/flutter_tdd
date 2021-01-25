@@ -8,14 +8,14 @@ import '../../domain/usecases/usecases.dart';
 import '../../domain/helpers/helpers.dart';
 
 class LoginState {
-  String email;
+  String username;
   String password;
-  String emailError;
+  String usernameError;
   String passwordError;
   String mainError;
   bool isLoad = false;
 
-  bool get isFormValid => emailError == null && passwordError == null && email != null && password != null;
+  bool get isFormValid => usernameError == null && passwordError == null && username != null && password != null;
 }
 
 class StreamLoginPresenter implements LoginPresenter {
@@ -26,7 +26,7 @@ class StreamLoginPresenter implements LoginPresenter {
 
   StreamLoginPresenter({@required this.validation, @required this.authentication});
 
-  Stream<String> get emailErrorStream => _controller?.stream?.map((state) => state.emailError)?.distinct();
+  Stream<String> get usernameErrorStream => _controller?.stream?.map((state) => state.usernameError)?.distinct();
   Stream<String> get passwordErrorStream => _controller?.stream?.map((state) => state.passwordError)?.distinct();
   Stream<String> get mainErrorStream => _controller?.stream?.map((state) => state.mainError)?.distinct();
   Stream<bool> get isFormValidStream => _controller?.stream?.map((state) => state.isFormValid)?.distinct();
@@ -34,9 +34,9 @@ class StreamLoginPresenter implements LoginPresenter {
 
   void _update() => _controller?.add(_state);
 
-  void validateEmail(String email) {
-    _state.email = email;
-    _state.emailError = validation.validate(field: 'email', value: email);
+  void validateUserName(String username) {
+    _state.username = username;
+    _state.usernameError = validation.validate(field: 'username', value: username);
     _update();
   }
 
@@ -49,7 +49,7 @@ class StreamLoginPresenter implements LoginPresenter {
   Future<void> auth() async {
     _toggeLoading(true);
     try {
-      await authentication.auth(AuthenticationParams(email: _state.email, password: _state.password));
+      await authentication.auth(AuthenticationParams(username: _state.username, password: _state.password));
     } on DomainError catch (error) {
       _state.mainError = error.description;
     }

@@ -25,13 +25,13 @@ class _EntryFieldsState extends State<EntryFields> {
                 height: 30,
               ),
               StreamBuilder<String>(
-                  stream: presenter.emailErrorStream,
+                  stream: presenter.usernameErrorStream,
                   builder: (context, snapshot) {
                     return TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: presenter.validateEmail,
+                      keyboardType: TextInputType.text,
+                      onChanged: presenter.validateUserName,
                       decoration: InputDecoration(
-                          labelText: "Email",
+                          labelText: "User name",
                           errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(

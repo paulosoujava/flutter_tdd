@@ -17,7 +17,7 @@ void main() {
   ValidationSpy validation;
   AuthenticationSpy authentication;
   StreamLoginPresenter sut;
-  String email;
+  String username;
   String password;
 
   PostExpectation mockValidationCall(String field) => when(validation.validate(field: field ?? anyNamed('field'), value: anyNamed('value')));
@@ -40,36 +40,36 @@ void main() {
     validation = ValidationSpy();
     authentication = AuthenticationSpy();
     sut = StreamLoginPresenter(validation: validation, authentication: authentication);
-    email = faker.internet.email();
+    username = faker.internet.userName();
     password = faker.internet.password();
     mockValidation(); //mock to success
     mockAuthentication();
   });
 
-  test('Should call validation with correct email', () {
-    sut.validateEmail(email);
+  test('Should call validation with correct username', () {
+    sut.validateUserName(username);
 
-    verify(validation.validate(field: 'email', value: email)).called(1);
+    verify(validation.validate(field: 'username', value: username)).called(1);
   });
 
-  test('Should emit email error if validation fails', () {
+  test('Should emit username error if validation fails', () {
     mockValidation(value: 'string error');
 
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'string error')));
+    sut.usernameErrorStream.listen(expectAsync1((error) => expect(error, 'string error')));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     // nao notificar duas vezes, isso se da por conta do distinct no stream_login_presenter
-    sut.validateEmail(email);
-    sut.validateEmail(email);
+    sut.validateUserName(username);
+    sut.validateUserName(username);
   });
 
   test('Should emit null if validate success', () {
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.usernameErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     // nao notificar duas vezes, isso se da por conta do distinct no stream_login_presenter
-    sut.validateEmail(email);
-    sut.validateEmail(email);
+    sut.validateUserName(username);
+    sut.validateUserName(username);
   });
 
   test('Should call validation with correct password', () {
@@ -98,50 +98,50 @@ void main() {
     sut.validatePassword(password);
   });
 
-  test('Should emit error only email input and password is ok', () {
-    mockValidation(field: 'email', value: 'error');
+  test('Should emit error only username input and password is ok', () {
+    mockValidation(field: 'username', value: 'error');
 
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
+    sut.usernameErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateEmail(email);
+    sut.validateUserName(username);
     sut.validatePassword(password);
   });
 
-  test('Should emit error only password input and email is ok', () {
+  test('Should emit error only password input and username is ok', () {
     mockValidation(field: 'password', value: 'error');
 
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+    sut.usernameErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, 'error')));
     sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
-    sut.validateEmail(email);
+    sut.validateUserName(username);
     sut.validatePassword(password);
   });
 
-  test('Should emit error only password input and email is ok', () async {
-    sut.emailErrorStream.listen(expectAsync1((error) => expect(error, null)));
+  test('Should emit error only password input and username is ok', () async {
+    sut.usernameErrorStream.listen(expectAsync1((error) => expect(error, null)));
     sut.passwordErrorStream.listen(expectAsync1((error) => expect(error, null)));
 
     expectLater(sut.isFormValidStream, emitsInOrder([false, true]));
 
-    sut.validateEmail(email);
+    sut.validateUserName(username);
     await Future.delayed(Duration.zero);
     sut.validatePassword(password);
   });
 
   test('Should call authentication with correct values', () async {
-    sut.validateEmail(email);
+    sut.validateUserName(username);
     sut.validatePassword(password);
 
     await sut.auth();
 
-    verify(authentication.auth(AuthenticationParams(email: email, password: password))).called(1);
+    verify(authentication.auth(AuthenticationParams(username: username, password: password))).called(1);
   });
 
   test('Should emit correct events on Authentication success', () async {
-    sut.validateEmail(email);
+    sut.validateUserName(username);
     sut.validatePassword(password);
 
     expectLater(sut.isLoadStream, emitsInOrder([true, false]));
@@ -151,7 +151,7 @@ void main() {
 
   test('Should emit correct events on InvalidCredentialsError', () async {
     mockAuthenticationError(DomainError.invalidCredentials);
-    sut.validateEmail(email);
+    sut.validateUserName(username);
     sut.validatePassword(password);
 
     expectLater(sut.isLoadStream, emits(false));
@@ -162,7 +162,7 @@ void main() {
 
   test('Should emit correct events on UnexpectedError', () async {
     mockAuthenticationError(DomainError.unexpected);
-    sut.validateEmail(email);
+    sut.validateUserName(username);
     sut.validatePassword(password);
 
     expectLater(sut.isLoadStream, emits(false));
@@ -172,8 +172,8 @@ void main() {
   });
 
   test('Should not emit after dispose', () async {
-    expectLater(sut.emailErrorStream, neverEmits(null));
+    expectLater(sut.usernameErrorStream, neverEmits(null));
     sut.dispose();
-    sut.validateEmail(email);
+    sut.validateUserName(username);
   });
 }
