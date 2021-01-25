@@ -5,7 +5,3 @@ import '../../../../ui/pages/pages.dart';
 LoginPresenter makeStreamLoginPresenter() {
   return StreamLoginPresenter(authentication: makeRemoteAuthentication(), validation: makeLLoginValidation());
 }
-
-LoginPresenter makeGetxLoginPresenter() {
-  return GetxLoginPresenter(authentication: makeRemoteAuthentication(), validation: makeLLoginValidation());
-}
