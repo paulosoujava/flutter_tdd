@@ -19,14 +19,14 @@ void main() {
     sut = HttpAdapter(client);
     url = faker.internet.httpsUrl();
   });
-  group('INVALID METHOD', () {
+  group('invalid method', () {
     test("Should throw ServerError if invalid method is provided", () {
       final future = sut.request(url: url, method: 'invalid_method ', body: {'any_key': 'any_value'});
 
       expect(future, throwsA(HttpError.serverError));
     });
   });
-  group('POST', () {
+  group('verb post', () {
     PostExpectation mockRequest() => when(client.post(any, body: anyNamed('body'), headers: anyNamed('headers')));
 
     void mockResponse(int statusCode, {String body = '{"any_key":"any_value"}'}) {
