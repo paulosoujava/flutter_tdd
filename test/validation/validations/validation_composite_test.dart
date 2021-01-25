@@ -12,7 +12,14 @@ class ValidationComposite implements Validation {
 
   @override
   String validate({@required String field, @required String value}) {
-    return null;
+    String error;
+    for (final validation in validations.where((element) => element.field == field)) {
+      final error = validation.validate(value);
+      if (error?.isNotEmpty == true) {
+        return error;
+      }
+    }
+    return error;
   }
 }
 
@@ -24,12 +31,12 @@ void main() {
   FieldValidationSpy validation2;
   FieldValidationSpy validation3;
 
-  void moackValidation(FieldValidationSpy validation, String error) {
+  void mockValidation(FieldValidationSpy validation, String error) {
     when(validation.validate(any)).thenReturn(error);
   }
 
-  void moackValidationAnyField(FieldValidationSpy validation) {
-    when(validation.field).thenReturn("any_field");
+  void mockValidationAnyField(FieldValidationSpy validation, String str) {
+    when(validation.field).thenReturn(str);
   }
 
   setUp(() {
@@ -37,21 +44,42 @@ void main() {
     validation2 = FieldValidationSpy();
     validation3 = FieldValidationSpy();
 
-    moackValidationAnyField(validation1);
-    moackValidation(validation1, null);
+    mockValidationAnyField(validation1, "any_field");
+    mockValidation(validation1, null);
 
-    moackValidationAnyField(validation2);
-    moackValidation(validation2, '');
+    mockValidationAnyField(validation2, "any_field");
+    mockValidation(validation2, null);
 
-    moackValidationAnyField(validation3);
-    moackValidation(validation2, 'other_field');
+    mockValidationAnyField(validation3, "any_field");
+    mockValidation(validation3, null);
 
     sut = ValidationComposite([validation1, validation2]);
   });
 
   test('Should return null if all returns null or empty', () {
-    final error = sut.validate(field: 'any_value', value: 'any_value');
+    mockValidation(validation1, '');
+    final error = sut.validate(field: 'any_field', value: 'any_value');
 
     expect(error, null);
+  });
+
+  test('Should return the first error', () {
+    mockValidation(validation1, 'error_1');
+    mockValidation(validation2, 'error_2');
+    mockValidation(validation3, 'error_3');
+
+    final error = sut.validate(field: 'any_field', value: 'any_value');
+
+    expect(error, 'error_1');
+  });
+
+  test('Should return the first error of the field', () {
+    mockValidation(validation1, null);
+    mockValidation(validation2, 'error_2');
+    mockValidation(validation3, 'error_3');
+
+    final error = sut.validate(field: 'any_field', value: 'any_value');
+
+    expect(error, 'error_2');
   });
 }
