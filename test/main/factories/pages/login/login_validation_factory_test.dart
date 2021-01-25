@@ -12,8 +12,8 @@ void main() {
 
     expect(validations, [
       RequiredFieldValidation('username'),
-      RequiredFieldValidation('password'),
       UserNameValidation('username'),
+      RequiredFieldValidation('password'),
     ]);
   });
 }
