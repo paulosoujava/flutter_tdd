@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter_application_1/domain/helpers/helpers.dart';
 import 'package:meta/meta.dart';
 
+import '../../ui/pages/pages.dart';
 import '../protocols/protocols.dart';
 import '../../domain/usecases/usecases.dart';
+import '../../domain/helpers/helpers.dart';
 
 class LoginState {
   String email;
@@ -17,7 +18,7 @@ class LoginState {
   bool get isFormValid => emailError == null && passwordError == null && email != null && password != null;
 }
 
-class StreamLoginPresenter {
+class StreamLoginPresenter implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
   var _controller = StreamController<LoginState>.broadcast();

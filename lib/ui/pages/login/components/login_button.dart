@@ -18,7 +18,7 @@ class _SubmitButtonState extends State<SubmitButton> {
     final presenter = Provider.of<LoginPresenter>(context);
     return Container(
       child: StreamBuilder<bool>(
-          stream: presenter.isFormValidController,
+          stream: presenter.isFormValidStream,
           builder: (context, snapshot) {
             return RaisedButton(
               onPressed: snapshot.data == true ? presenter.auth : null,

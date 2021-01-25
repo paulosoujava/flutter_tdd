@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Builder(
         builder: (context) {
-          widget.presenter.isLoadController.listen((isLoading) {
+          widget.presenter.isLoadStream.listen((isLoading) {
             if (isLoading) {
               loading(context);
             } else {
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
               }
             }
           });
-          widget.presenter.mainErrorController.listen((error) {
+          widget.presenter.mainErrorStream.listen((error) {
             if (error != null) {
               Scaffold.of(context).showSnackBar(showSnack(context, error));
             }

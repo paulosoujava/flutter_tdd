@@ -13,7 +13,7 @@ class RemoteAuthentication implements Authentication {
   final String url;
   final String method;
 
-  RemoteAuthentication({@required this.httpClient, @required this.url, @required this.method});
+  RemoteAuthentication({@required this.httpClient, @required this.url, this.method});
 
   Future<AccountEntity> auth(AuthenticationParams params) async {
     try {
