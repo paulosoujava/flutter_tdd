@@ -4,6 +4,11 @@ Widget forgetPassword() {
   return Container(
     padding: EdgeInsets.symmetric(vertical: 10),
     alignment: Alignment.centerRight,
-    child: Text('epa esqueci a senha', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+    child: Text('epa esqueci a senha',
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: Colors.orange[700],
+        )),
   );
 }
