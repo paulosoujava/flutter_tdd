@@ -21,22 +21,35 @@ class FieldValidationSpy extends Mock implements FieldValidation {}
 void main() {
   ValidationComposite sut;
   FieldValidationSpy validation1;
-  when(validation1.field).thenReturn('any_field');
   FieldValidationSpy validation2;
+  FieldValidationSpy validation3;
+
+  void moackValidation(FieldValidationSpy validation, String error) {
+    when(validation.validate(any)).thenReturn(error);
+  }
+
+  void moackValidationAnyField(FieldValidationSpy validation) {
+    when(validation.field).thenReturn("any_field");
+  }
 
   setUp(() {
     validation1 = FieldValidationSpy();
     validation2 = FieldValidationSpy();
+    validation3 = FieldValidationSpy();
+
+    moackValidationAnyField(validation1);
+    moackValidation(validation1, null);
+
+    moackValidationAnyField(validation2);
+    moackValidation(validation2, '');
+
+    moackValidationAnyField(validation3);
+    moackValidation(validation2, 'other_field');
+
+    sut = ValidationComposite([validation1, validation2]);
   });
 
   test('Should return null if all returns null or empty', () {
-    when(validation1.field).thenReturn('any_field');
-    when(validation1.validate(any)).thenReturn(null);
-    when(validation2.field).thenReturn('any_field');
-    when(validation2.validate(any)).thenReturn('');
-
-    sut = ValidationComposite([validation1, validation2]);
-
     final error = sut.validate(field: 'any_value', value: 'any_value');
 
     expect(error, null);
