@@ -32,7 +32,7 @@ void main() {
     httpClient = HttpClientSpy();
     url = faker.internet.httpUrl();
     sut = RemoteAuthentication(httpClient: httpClient, url: url, method: 'post');
-    params = AuthenticationParams(email: faker.internet.email(), password: faker.internet.password());
+    params = AuthenticationParams(username: faker.internet.userName(), password: faker.internet.password());
     // qualquer test que nao fizer nada por padrao vai mocar um caso de sucesso
     mockHttpData(mockValidData());
   });
@@ -45,7 +45,7 @@ void main() {
     //?Action
     await sut.auth(params);
     //?Assert
-    verify(httpClient.request(url: url, method: 'post', body: {'email': params.email, 'password': params.password}));
+    verify(httpClient.request(url: url, method: 'post', body: {'username': params.username, 'password': params.password}));
   });
 
   test('Should throw UnexpectedError if HttpClient returns 400 ', () async {
