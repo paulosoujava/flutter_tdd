@@ -40,6 +40,11 @@ void main() {
     mockAuthenticationCall().thenThrow(error);
   }
 
+  PostExpectation mockSaveCurrentTokenCall() => when(saveCurrentToken.saveToken(any));
+  void mockSaveCurrentTokenError() {
+    mockSaveCurrentTokenCall().thenThrow(DomainError.unexpected);
+  }
+
   setUp(() {
     validation = ValidationSpy();
     authentication = AuthenticationSpy();
@@ -154,7 +159,7 @@ void main() {
     sut.validateUserName(username);
     sut.validatePassword(password);
 
-    expectLater(sut.isLoadStream, emitsInOrder([true, false]));
+    expectLater(sut.isLoadStream, emits(true));
 
     await sut.auth();
   });
@@ -188,6 +193,22 @@ void main() {
     verify(saveCurrentToken.saveToken(Token(token))).called(1);
   });
 
+  // test('Should emit UnexpectedError if SaveCurrentToken fails', () async {
+  //   mockSaveCurrentTokenError();
+  //   sut.validateUserName(username);
+  //   sut.validatePassword(password);
+
+  //   sut.mainErrorStream.listen(expectAsync1((error) => expect(error, null)));
+
+  //   await sut.auth();
+  // });
+  test('Should change page on success', () async {
+    sut.validateUserName(username);
+    sut.validatePassword(password);
+    sut.navigateToStream.listen(expectAsync1((page) => expect(page, '/home')));
+
+    await sut.auth();
+  });
   test('Should not emit after dispose', () async {
     expectLater(sut.usernameErrorStream, neverEmits(null));
     sut.dispose();

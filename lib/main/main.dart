@@ -22,7 +22,17 @@ class _AppState extends State<App> {
       debugShowCheckedModeBanner: false,
       theme: makeAppTheme(),
       initialRoute: '/login',
-      getPages: [GetPage(name: '/login', page: makeLoginPage)],
+      getPages: [
+        GetPage(
+          name: '/login',
+          page: makeLoginPage,
+        ),
+        GetPage(
+            name: '/home',
+            page: () => Scaffold(
+                  body: Text("HOME"),
+                )),
+      ],
     );
   }
 }

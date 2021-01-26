@@ -10,6 +10,7 @@ import '../../domain/helpers/helpers.dart';
 class LoginState {
   String username;
   String password;
+  String navigateTo;
   String usernameError;
   String passwordError;
   String mainError;
@@ -27,6 +28,7 @@ class StreamLoginPresenter implements LoginPresenter {
 
   StreamLoginPresenter({@required this.saveCurrentToken, @required this.validation, @required this.authentication});
 
+  Stream<String> get navigateToStream => _controller?.stream?.map((state) => state.navigateTo)?.distinct();
   Stream<String> get usernameErrorStream => _controller?.stream?.map((state) => state.usernameError)?.distinct();
   Stream<String> get passwordErrorStream => _controller?.stream?.map((state) => state.passwordError)?.distinct();
   Stream<String> get mainErrorStream => _controller?.stream?.map((state) => state.mainError)?.distinct();
@@ -48,15 +50,16 @@ class StreamLoginPresenter implements LoginPresenter {
   }
 
   Future<void> auth() async {
-    _toggeLoading(true);
     try {
+      _toggeLoading(true);
       final token = await authentication.auth(AuthenticationParams(username: _state.username, password: _state.password));
       await saveCurrentToken.saveToken(token);
+      _state.navigateTo = '/home';
     } on DomainError catch (error) {
       _state.mainError = error.description;
+    } finally {
+      _toggeLoading(false);
     }
-
-    _toggeLoading(false);
   }
 
   void dispose() {
